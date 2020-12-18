@@ -24,9 +24,13 @@ body {
 
 /* ---- Layout Rules ---- */
 main {
-    margin: 10vh 1em 10vh;
+    margin: 75px 1em 10vh;
 }
-
+@media only screen and (max-width: 500px) {
+    main {
+        margin: 115px 1em 10vh;
+    }
+}
 section {
     position: relative;
     margin-bottom: 2rem;

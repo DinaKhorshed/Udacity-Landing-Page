@@ -25,6 +25,7 @@ const documentRoot = document.documentElement;
 const scrollTopButton = document.getElementById("scrollTopButton");
 const allSections = document.querySelectorAll('section[data-nav]');
 const listItemsHolder = document.createDocumentFragment();
+const pageHeader = document.querySelector("header.page__header");
 
 let navLinksContainer = document.getElementById("navbar__list");
 /**
@@ -47,16 +48,28 @@ let toggleButtonAndHeaderOnScroll = () => {
         scrollTopButton.classList.remove("--show");
     }
 
-    // Hide header if page is scrolled by 150
-    const pageHeader = document.querySelector("header.page__header");
-    if (documentRoot.scrollTop >= 150) {
-        // Hide Header
-        pageHeader.classList.add("--hide");
-    } else {
-        // Show Header
-        pageHeader.classList.remove("--hide");
-    }
+    // hide the header when you are scrolling
+    pageHeader.classList.add("--hide");
+
+    // Show Header when not Scrolling
+    hideHeader();
 };
+
+let delayFnExec = (after, fn) => {
+    let timer;
+    return function () {
+        timer && clearTimeout(timer);
+        timer = setTimeout(fn, after);
+    };
+};
+
+let hideHeader = () => {
+    // Calling delayedExec function
+    (delayFnExec(1000, () => {
+        //you stopped scrolling a moment ago, so un-hide the header now
+        pageHeader.classList.remove("--hide");
+    }))();
+}
 
 // scroll to top
 let scrollPageToTheTop = () => {
@@ -100,8 +113,8 @@ let activateWhenInViewport = () => {
         const getAnchor = document.querySelector(anchorSelector);
         if (
             sectionOutline.top >= 0 &&
+            sectionOutline.top < (window.innerHeight / 3 || document.documentElement.clientHeight / 3) &&
             sectionOutline.left >= 0 &&
-            sectionOutline.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
             sectionOutline.right <= (window.innerWidth || document.documentElement.clientWidth)
 
         ) {
